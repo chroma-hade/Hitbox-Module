@@ -1,4 +1,5 @@
 Hitbox module for combat game or boss fight
+Made by chroma_hade
 
 ```lua
 local Players = game:GetService("Players")
