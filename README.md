@@ -1,5 +1,4 @@
-Hitbox module for combat game or boss fight
-Made by chroma_hade
+Example is down blow.
 
 ```lua
 local Players = game:GetService("Players")
