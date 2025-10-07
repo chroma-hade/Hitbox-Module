@@ -15,9 +15,11 @@ type Data = {
 
 type VictimData = {
 	["Attacker"] : Model,
-	["Parts"] : {BasePart},
-	["Box"] : BasePart,
 	["Callback"] : RBXScriptSignal,
+	["Parts"] : {BasePart},
+	["Limit"] : number,
+	["Data"] : {any},
+	["Box"] : BasePart,
 }
 
 type MixData = {
@@ -56,51 +58,63 @@ end
 
 local function GetVictims(Victims, Data : VictimData)
 	local Attacker = Data["Attacker"]
-	local Parts = Data["Parts"]
-	local Box = Data["Box"]
 	local Callback = Data["Callback"]
-	
+	local Parts = Data["Parts"]
+	local Limit = Data["Limit"]
+	local Data = Data["Data"]
+	local Box = Data["Box"]
+
+	local LocalCount = 0
+
 	for Index, Part : BasePart in Parts do
 		local Character = IsCharacter(Part)
-		if Character and Attacker ~= Character and not table.find(Victims, Character) then
-			Callback(Character, Box.CFrame)
-			table.insert(Victims, Character)
+		if Character and Attacker ~= Character and UtilHelper:IsAlive(Character) and not table.find(Victims, Character) then
+			if Limit > LocalCount then
+				LocalCount += 1
+				Callback(Character, Attacker, Box.CFrame, Data)
+				table.insert(Victims, Character)
+			end
 		end
 	end
-	
+
 	return #Victims
 end
 
 local function WaitForHit(Data : MixData)
 	local Victims = {}
-	
-	local Attacker = Data["Attacker"]
-	local Box = Data["Box"]
-	local HitLimit = Data["HitLimit"]
-	local Callback = Data["Callback"]
+
 	local Connection = Data["Connection"]
-	
+
+	local Attacker = Data["Attacker"]
+	local Callback = Data["Callback"]
+	local HitLimit = Data["HitLimit"]
+	local Data = Data["Data"]
+	local Box = Data["Box"]
+
 	local TotalHit = 0
 	local TouchingParts = nil
-	
+
 	repeat task.wait()
 		TouchingParts = Box:GetTouchingParts()
 		local LeastVictims = GetVictims(Victims, 
 			{
 				["Attacker"] = Attacker,
-				["Parts"] = TouchingParts,
-				["Box"] = Box,
 				["Callback"] = Callback,
+				["Parts"] = TouchingParts,
+				["Limit"] = HitLimit,
+				["Data"] = Data,
+				["Box"] = Box,
 			}
 		)
+		TotalHit += LeastVictims
 		if #Victims >= HitLimit then
 			break
 		end
 	until Box.Parent == nil
-	
+
 	table.clear(Victims)
 	Victims = nil
-	
+
 	if Connection then
 		Connection:Disconnect()
 	end
