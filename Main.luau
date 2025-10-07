@@ -59,9 +59,9 @@ end
 local function GetVictims(Victims, Data : VictimData)
 	local Attacker = Data["Attacker"]
 	local Callback = Data["Callback"]
+	local HBData = Data["HBData"]
 	local Parts = Data["Parts"]
 	local Limit = Data["Limit"]
-	local Data = Data["Data"]
 	local Box = Data["Box"]
 
 	local LocalCount = 0
@@ -71,7 +71,7 @@ local function GetVictims(Victims, Data : VictimData)
 		if Character and Attacker ~= Character and UtilHelper:IsAlive(Character) and not table.find(Victims, Character) then
 			if Limit > LocalCount then
 				LocalCount += 1
-				Callback(Character, Attacker, Box.CFrame, Data)
+				Callback(Character, Attacker, Box.CFrame, HBData)
 				table.insert(Victims, Character)
 			end
 		end
@@ -88,7 +88,7 @@ local function WaitForHit(Data : MixData)
 	local Attacker = Data["Attacker"]
 	local Callback = Data["Callback"]
 	local HitLimit = Data["HitLimit"]
-	local Data = Data["Data"]
+	local HBData = Data["HBData"]
 	local Box = Data["Box"]
 
 	local TotalHit = 0
@@ -100,9 +100,9 @@ local function WaitForHit(Data : MixData)
 			{
 				["Attacker"] = Attacker,
 				["Callback"] = Callback,
+				["HBData"] = HBData,
 				["Parts"] = TouchingParts,
 				["Limit"] = HitLimit,
-				["Data"] = Data,
 				["Box"] = Box,
 			}
 		)
@@ -122,24 +122,30 @@ end
 
 local function Create(Data : Data)
 	local Attacker = Data["Attacker"] or nil
+
 	local _CFrame = Data["CFrame"] or CFrame.new(0, 0, 0)
 	local Offset = Data["Offset"] or CFrame.new(0, 0, 0)
+
 	local Size = Data["Size"] or Vector3.one
+
 	local HitLimit = Data["HitLimit"] or 1
 	local LifeTime = Data["LifeTime"] or 1
+
 	local Callback = Data["Callback"]
-	
+	local Data = Data["Data"]
+
 	local Box = CreateBox(_CFrame, Size)
 	local Connection = Box.Touched:Connect(function() end)
-	
+
 	task.delay(LifeTime, RemoveObject, Box)
 	task.defer(WaitForHit, 
 		{
-			["Attacker"] = Attacker,
-			["Box"] = Box,
-			["HitLimit"] = HitLimit,
-			["Callback"] = Callback,
 			["Connection"] = Connection,
+			["Attacker"] = Attacker,
+			["Callback"] = Callback,
+			["HitLimit"] = HitLimit,
+			["Data"] = Data,
+			["Box"] = Box,
 		}
 	)
 end
