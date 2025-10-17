@@ -68,7 +68,7 @@ local function GetVictims(Victims, Data : VictimData)
 
 	for Index, Part : BasePart in Parts do
 		local Character = IsCharacter(Part)
-		if Character and Attacker ~= Character and UtilHelper:IsAlive(Character) and not table.find(Victims, Character) then
+		if Character and Attacker ~= Character and not table.find(Victims, Character) then
 			if Limit > LocalCount then
 				LocalCount += 1
 				Callback(Character, Attacker, Box.CFrame, HBData)
