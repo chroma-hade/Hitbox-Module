@@ -6,7 +6,7 @@ local Hitbox = require("ModuleLocation")
 
 local Character : Model = nil
 
-local function Callback(Victim : Model, Attacker : Model, _CFrame : CFrame) -- CFrame is hitbox cframe.
+local function Callback(Victim : Model, Attacker : Model, _CFrame : CFrame, HitboxData : any) -- CFrame is hitbox cframe.
 	local Humanoid : Humanoid = Victim:FindFirstChild("Humanoid")
 	local RootPart : BasePart = Victim:FindFirstChild("HumanoidRootPart")
 	local _Player = Players:GetPlayerFromCharacter(Victim)
