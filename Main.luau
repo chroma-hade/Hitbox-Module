@@ -11,13 +11,13 @@ type Data = {
 	["HitLimit"] : number,
 	["LifeTime"] : number,
 	["Callback"] : RBXScriptSignal,
-    ["ShareData"] : any,
+	["ShareData"] : any,
 }
 
 type VictimData = {
 	["Attacker"] : Model,
 	["HitLimit"] : number,
-	["Box"] : BasePart,
+	["Hitbox"] : BasePart,
 	["Parts"] : {BasePart},
 	["Callback"] : RBXScriptSignal,
 	["ShareData"] : any,
@@ -28,7 +28,7 @@ type MixData = {
 	["HitLimit"] : number,
 	["Hitbox"] : BasePart,
 	["Callback"] : RBXScriptSignal,
-    ["ShareData"] : any,
+	["ShareData"] : any,
 	["Connection"] : RBXScriptConnection,
 }
 
