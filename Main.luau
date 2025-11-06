@@ -15,18 +15,18 @@ type Data = {
 }
 
 type VictimData = {
-	["ShareData"] : any,
 	["Attacker"] : Model,
-	["Callback"] : RBXScriptSignal,
-	["Parts"] : {BasePart},
-	["Limit"] : number,
+	["HitLimit"] : number,
 	["Box"] : BasePart,
+	["Parts"] : {BasePart},
+	["Callback"] : RBXScriptSignal,
+	["ShareData"] : any,
 }
 
 type MixData = {
 	["Attacker"] : Model,
-	["Box"] : BasePart,
 	["HitLimit"] : number,
+	["Hitbox"] : BasePart,
 	["Callback"] : RBXScriptSignal,
     ["ShareData"] : any,
 	["Connection"] : RBXScriptConnection,
@@ -69,18 +69,18 @@ end
 
 local function GetVictims(Victims, Data : VictimData)
 	local Attacker = Data["Attacker"]
+	local HitLimit = Data["HitLimit"]
+	local Hitbox = Data["Hitbox"]
+	local Parts = Data["Parts"]
 	local Callback = Data["Callback"]
 	local ShareData = Data["ShareData"]
-	local Parts = Data["Parts"]
-	local Limit = Data["Limit"]
-	local Box = Data["Box"]
 
 	local LocalCount = 0
 
 	for Index, Part : BasePart in Parts do
 		local Character = IsCharacter(Part)
 		if Character and Attacker ~= Character and not table.find(Victims, Character) then
-			if Limit > LocalCount then
+			if HitLimit > LocalCount then
 				LocalCount += 1
 				Callback(Character, Attacker, Box.CFrame, ShareData)
 				table.insert(Victims, Character)
@@ -97,10 +97,10 @@ local function WaitForHit(Data : MixData)
 	local Connection = Data["Connection"]
 
 	local Attacker = Data["Attacker"]
-	local Callback = Data["Callback"]
 	local HitLimit = Data["HitLimit"]
+	local Hitbox = Data["Hitbox"]
+	local Callback = Data["Callback"]
 	local ShareData = Data["ShareData"]
-	local Box = Data["Box"]
 
 	local TotalHit = 0
 	local TouchingParts = nil
@@ -110,11 +110,11 @@ local function WaitForHit(Data : MixData)
 		local LeastVictims = GetVictims(Victims, 
 			{
 				["Attacker"] = Attacker,
+				["Limit"] = HitLimit,
+				["Hitbox"] = Hitbox,
+				["Parts"] = TouchingParts,
 				["Callback"] = Callback,
 				["ShareData"] = ShareData,
-				["Parts"] = TouchingParts,
-				["Limit"] = HitLimit,
-				["Box"] = Box,
 			}
 		)
 		TotalHit += LeastVictims
@@ -145,18 +145,18 @@ local function Create(Data : Data)
 	local Callback = Data["Callback"]
 	local ShareData = Data["ShareData"]
 
-	local Box = CreateBox(_CFrame, Size)
+	local Hitbox = CreateBox(_CFrame, Size)
 	local Connection = Box.Touched:Connect(function() end)
 
 	task.delay(LifeTime, RemoveObject, Box)
 	task.defer(WaitForHit, 
 		{
-			["Connection"] = Connection,
 			["Attacker"] = Attacker,
-			["Callback"] = Callback,
 			["HitLimit"] = HitLimit,
+			["Hitbox"] = Hitbox,
+			["Callback"] = Callback,
 			["ShareData"] = ShareData,
-			["Box"] = Box,
+			["Connection"] = Connection,
 		}
 	)
 end
