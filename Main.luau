@@ -110,7 +110,7 @@ local function WaitForHit(Data : MixData)
 		local LeastVictims = GetVictims(Victims, 
 			{
 				["Attacker"] = Attacker,
-				["Limit"] = HitLimit,
+				["HitLimit"] = HitLimit,
 				["Hitbox"] = Hitbox,
 				["Parts"] = TouchingParts,
 				["Callback"] = Callback,
