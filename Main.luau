@@ -68,7 +68,7 @@ end
 local function GetVictims(Victims, Data : VictimData)
 	local Attacker = Data["Attacker"]
 	local Callback = Data["Callback"]
-	local HBData = Data["HBData"]
+	local OutData = Data["HBData"]
 	local Parts = Data["Parts"]
 	local Limit = Data["Limit"]
 	local Box = Data["Box"]
@@ -80,7 +80,7 @@ local function GetVictims(Victims, Data : VictimData)
 		if Character and Attacker ~= Character and not table.find(Victims, Character) then
 			if Limit > LocalCount then
 				LocalCount += 1
-				Callback(Character, Attacker, Box.CFrame, HBData)
+				Callback(Character, Attacker, Box.CFrame, OutData)
 				table.insert(Victims, Character)
 			end
 		end
@@ -97,7 +97,7 @@ local function WaitForHit(Data : MixData)
 	local Attacker = Data["Attacker"]
 	local Callback = Data["Callback"]
 	local HitLimit = Data["HitLimit"]
-	local HBData = Data["HBData"]
+	local OutData = Data["OutData"]
 	local Box = Data["Box"]
 
 	local TotalHit = 0
@@ -109,7 +109,7 @@ local function WaitForHit(Data : MixData)
 			{
 				["Attacker"] = Attacker,
 				["Callback"] = Callback,
-				["HBData"] = HBData,
+				["OutData"] = OutData,
 				["Parts"] = TouchingParts,
 				["Limit"] = HitLimit,
 				["Box"] = Box,
@@ -153,7 +153,7 @@ local function Create(Data : Data)
 			["Attacker"] = Attacker,
 			["Callback"] = Callback,
 			["HitLimit"] = HitLimit,
-			["Data"] = Data,
+			["OutData"] = Data,
 			["Box"] = Box,
 		}
 	)
