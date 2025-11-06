@@ -6,7 +6,7 @@ local Hitbox = require("ModuleLocation")
 
 local Character : Model = nil
 
-local function Callback(Victim : Model, Attacker : Model, _CFrame : CFrame, HitboxData : any) -- CFrame is hitbox cframe.
+local function Callback(Victim : Model, Attacker : Model, _CFrame : CFrame, ShareData : any) -- CFrame is hitbox cframe.
 	local Humanoid : Humanoid = Victim:FindFirstChild("Humanoid")
 	local RootPart : BasePart = Victim:FindFirstChild("HumanoidRootPart")
 	local _Player = Players:GetPlayerFromCharacter(Victim)
@@ -25,6 +25,6 @@ Hitbox.Create({
 	["LifeTime"] = .1, -- Lifetime for automatic remove
 	["CFrame"] = CFrame.new(0, 0, 0), -- Hitbox CFrame
 	["Size"] = Vector3.new(6, 6, 9), -- Hitbox Size
-    ["Data"] = "Hello World!", -- this is "HitboxData" you can use table too.
+    ["Data"] = "Hello World!", -- this is "ShareData" you can use table too.
 })
 ```
