@@ -82,7 +82,7 @@ local function GetVictims(Victims, Data : VictimData)
 		if Character and Attacker ~= Character and not table.find(Victims, Character) then
 			if HitLimit > LocalCount then
 				LocalCount += 1
-				Callback(Character, Attacker, Box.CFrame, ShareData)
+				Callback(Character, Attacker, Hitbox.CFrame, ShareData)
 				table.insert(Victims, Character)
 			end
 		end
@@ -106,7 +106,7 @@ local function WaitForHit(Data : MixData)
 	local TouchingParts = nil
 
 	repeat task.wait()
-		TouchingParts = Box:GetTouchingParts()
+		TouchingParts = Hitbox:GetTouchingParts()
 		local LeastVictims = GetVictims(Victims, 
 			{
 				["Attacker"] = Attacker,
@@ -121,7 +121,7 @@ local function WaitForHit(Data : MixData)
 		if #Victims >= HitLimit then
 			break
 		end
-	until Box.Parent == nil
+	until Hitbox.Parent == nil
 
 	table.clear(Victims)
 	Victims = nil
@@ -146,9 +146,9 @@ local function Create(Data : Data)
 	local ShareData = Data["ShareData"]
 
 	local Hitbox = CreateBox(_CFrame, Size)
-	local Connection = Box.Touched:Connect(function() end)
+	local Connection = Hitbox.Touched:Connect(function() end)
 
-	task.delay(LifeTime, RemoveObject, Box)
+	task.delay(LifeTime, RemoveObject, Hitbox)
 	task.defer(WaitForHit, 
 		{
 			["Attacker"] = Attacker,
