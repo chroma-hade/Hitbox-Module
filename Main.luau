@@ -11,14 +11,15 @@ type Data = {
 	["HitLimit"] : number,
 	["LifeTime"] : number,
 	["Callback"] : RBXScriptSignal,
+    ["ShareData"] : any,
 }
 
 type VictimData = {
+	["ShareData"] : any,
 	["Attacker"] : Model,
 	["Callback"] : RBXScriptSignal,
 	["Parts"] : {BasePart},
 	["Limit"] : number,
-	["Data"] : {any},
 	["Box"] : BasePart,
 }
 
@@ -27,6 +28,7 @@ type MixData = {
 	["Box"] : BasePart,
 	["HitLimit"] : number,
 	["Callback"] : RBXScriptSignal,
+    ["ShareData"] : any,
 	["Connection"] : RBXScriptConnection,
 }
 
@@ -68,7 +70,7 @@ end
 local function GetVictims(Victims, Data : VictimData)
 	local Attacker = Data["Attacker"]
 	local Callback = Data["Callback"]
-	local OutData = Data["HBData"]
+	local ShareData = Data["ShareData"]
 	local Parts = Data["Parts"]
 	local Limit = Data["Limit"]
 	local Box = Data["Box"]
@@ -80,7 +82,7 @@ local function GetVictims(Victims, Data : VictimData)
 		if Character and Attacker ~= Character and not table.find(Victims, Character) then
 			if Limit > LocalCount then
 				LocalCount += 1
-				Callback(Character, Attacker, Box.CFrame, OutData)
+				Callback(Character, Attacker, Box.CFrame, ShareData)
 				table.insert(Victims, Character)
 			end
 		end
@@ -97,7 +99,7 @@ local function WaitForHit(Data : MixData)
 	local Attacker = Data["Attacker"]
 	local Callback = Data["Callback"]
 	local HitLimit = Data["HitLimit"]
-	local OutData = Data["OutData"]
+	local ShareData = Data["ShareData"]
 	local Box = Data["Box"]
 
 	local TotalHit = 0
@@ -109,7 +111,7 @@ local function WaitForHit(Data : MixData)
 			{
 				["Attacker"] = Attacker,
 				["Callback"] = Callback,
-				["OutData"] = OutData,
+				["ShareData"] = ShareData,
 				["Parts"] = TouchingParts,
 				["Limit"] = HitLimit,
 				["Box"] = Box,
@@ -141,7 +143,7 @@ local function Create(Data : Data)
 	local LifeTime = Data["LifeTime"] or 1
 
 	local Callback = Data["Callback"]
-	local Data = Data["Data"]
+	local ShareData = Data["ShareData"]
 
 	local Box = CreateBox(_CFrame, Size)
 	local Connection = Box.Touched:Connect(function() end)
@@ -153,7 +155,7 @@ local function Create(Data : Data)
 			["Attacker"] = Attacker,
 			["Callback"] = Callback,
 			["HitLimit"] = HitLimit,
-			["OutData"] = Data,
+			["ShareData"] = ShareData,
 			["Box"] = Box,
 		}
 	)
