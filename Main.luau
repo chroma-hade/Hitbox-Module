@@ -1,7 +1,7 @@
 local Hitbox = {}
 
-local Hitboxs = workspace["Hitboxs"] -- Hitbox Parent
 local Transparency = .5 -- Hitbox Transparency
+local Folder = nil
 
 type Data = {
 	["Attacker"] : Model,
@@ -30,6 +30,15 @@ type MixData = {
 	["Connection"] : RBXScriptConnection,
 }
 
+local function GetFolder()
+	if Folder then
+		return Folder
+	else
+		Folder = Instance.new("Folder", workspace)
+		Folder.Name = "Hitboxs"
+	end
+end
+
 local function RemoveObject(Object : Instance)
 	if Object then
 		Object:Destroy()
@@ -37,7 +46,7 @@ local function RemoveObject(Object : Instance)
 end
 
 local function CreateBox(CFrame : CFrame, Size : Vector3)
-	local Part = Instance.new("Part", Hitboxs)
+	local Part = Instance.new("Part", GetFolder())
 	Part.Material = Enum.Material.SmoothPlastic
 	Part.Color = Color3.fromRGB(255, 0, 0)
 	Part.CastShadow = false
