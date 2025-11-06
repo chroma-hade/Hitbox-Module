@@ -25,5 +25,6 @@ Hitbox.Create({
 	["LifeTime"] = .1, -- Lifetime for automatic remove
 	["CFrame"] = CFrame.new(0, 0, 0), -- Hitbox CFrame
 	["Size"] = Vector3.new(6, 6, 9), -- Hitbox Size
+    ["Data"] = "Hi", -- this is "HitboxData" you can use table too.
 })
 ```
