@@ -32,6 +32,7 @@ local Hitbox : BasePart = Hitbox.Create({
 
 -- You can change color from created Hitbox too!, it's just a "BasePart".
 Hitbox.Color = Color.new(0, 0, 1)
+
 -- You can keep change cframe while it's running too! (It's "BasePart")
 Hitbox.CFrame = YourCFrame 
 ```
