@@ -1,5 +1,6 @@
 local Hitbox = {}
 
+local DefaultLimit = 10 -- Default Hit Limit
 local Transparency = .8 -- Hitbox Transparency
 local Folder = nil
 
@@ -83,6 +84,7 @@ local function GetVictims(Victims, Data : VictimData)
 		if Character and Attacker ~= Character and not table.find(Victims, Character) then
 			if HitLimit > LocalCount then
 				LocalCount += 1
+				Hitbox.Color = Color3.new(0, 1, 0)
 				Callback(Character, Attacker, Hitbox.CFrame, ShareData)
 				table.insert(Victims, Character)
 			end
@@ -140,7 +142,7 @@ local function Create(Data : Data)
 
 	local Size = Data["Size"] or Vector3.one
 
-	local HitLimit = Data["HitLimit"] or 1
+	local HitLimit = Data["HitLimit"] or DefaultLimit
 	local LifeTime = Data["LifeTime"] or 1
 
 	local Callback = Data["Callback"]
@@ -160,6 +162,8 @@ local function Create(Data : Data)
 			["Connection"] = Connection,
 		}
 	)
+	
+	return Hitbox
 end
 
 Hitbox.Create = Create
