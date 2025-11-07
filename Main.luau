@@ -1,6 +1,6 @@
 local Hitbox = {}
 
-local Transparency = .5 -- Hitbox Transparency
+local Transparency = .8 -- Hitbox Transparency
 local Folder = nil
 
 type Data = {
