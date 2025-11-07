@@ -38,6 +38,7 @@ local function GetFolder()
 	else
 		Folder = Instance.new("Folder", workspace)
 		Folder.Name = "Hitboxs"
+		return Folder
 	end
 end
 
