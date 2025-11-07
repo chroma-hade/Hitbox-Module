@@ -2,6 +2,7 @@ local Hitbox = {}
 
 local DefaultLimit = 10 -- Default Hit Limit
 local Transparency = .8 -- Hitbox Transparency
+
 local Folder = nil
 
 type Data = {
@@ -162,7 +163,7 @@ local function Create(Data : Data)
 			["Connection"] = Connection,
 		}
 	)
-	
+
 	return Hitbox
 end
 
