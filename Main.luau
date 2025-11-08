@@ -12,7 +12,7 @@ type Data = {
 	["Size"] : Vector3,
 	["HitLimit"] : number,
 	["LifeTime"] : number,
-	["Callback"] : RBXScriptSignal,
+	["Callback"] : "function",
 	["ShareData"] : any,
 }
 
@@ -21,7 +21,7 @@ type VictimData = {
 	["HitLimit"] : number,
 	["Hitbox"] : BasePart,
 	["Parts"] : {BasePart},
-	["Callback"] : RBXScriptSignal,
+	["Callback"] : "function",
 	["ShareData"] : any,
 }
 
@@ -29,7 +29,7 @@ type MixData = {
 	["Attacker"] : Model,
 	["HitLimit"] : number,
 	["Hitbox"] : BasePart,
-	["Callback"] : RBXScriptSignal,
+	["Callback"] : "function",
 	["ShareData"] : any,
 	["Connection"] : RBXScriptConnection,
 }
