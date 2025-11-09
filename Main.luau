@@ -86,7 +86,7 @@ local function GetVictims(Victims, Data : VictimData)
 			if HitLimit > LocalCount then
 				LocalCount += 1
 				Hitbox.Color = Color3.new(0, 1, 0)
-				Callback(Character, Attacker, Hitbox.CFrame, ShareData)
+                task.defer(Callback, Character, Attacker, Hitbox.CFrame, ShareData)
 				table.insert(Victims, Character)
 			end
 		end
