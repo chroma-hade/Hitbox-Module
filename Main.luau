@@ -64,7 +64,7 @@ local function CreateBox(CFrame : CFrame, Size : Vector3)
 end
 
 local function IsCharacter(BasePart : BasePart)
-	local Humanoid : BasePart = BasePart.Parent:FindFirstChild("Humanoid")
+	local Humanoid : Humanoid = BasePart.Parent:FindFirstChild("Humanoid")
 	if Humanoid then
 		return Humanoid.Parent
 	end
