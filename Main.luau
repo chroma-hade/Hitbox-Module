@@ -95,34 +95,61 @@ local function GetVictims(Victims, Data : VictimData)
 	return #Victims
 end
 
+local function ActionBox(TotalHit, Victims : {}, Data : MixData)
+	local Attacker = Data["Attacker"]
+	local Projectile = Data["Projectile"]
+	local HitLimit = Data["HitLimit"]
+	local Hitbox = Data["Hitbox"]
+	local Callback = Data["Callback"]
+	local E_Callback = Data["E_Callback"]
+	local ShareData = Data["ShareData"]
+	local IgnoreGround = Data["IgnoreGround"]
+	local TouchingParts = Hitbox:GetTouchingParts()
+	local LeastVictims = GetVictims(Victims, 
+		{
+			["Attacker"] = Attacker,
+			["Projectile"] = Projectile,
+			["HitLimit"] = HitLimit,
+			["Hitbox"] = Hitbox,
+			["Parts"] = TouchingParts,
+			["Callback"] = Callback,
+			["E_Callback"] = E_Callback,
+			["ShareData"] = ShareData,
+			["IgnoreGround"] = IgnoreGround,
+		}
+	)
+	TotalHit += LeastVictims
+	if TotalHit > 0 then
+		Hitbox:SetAttribute("Hit", true)
+	end
+	if #Victims >= HitLimit then
+		if Projectile then
+			Hitbox:Destroy()
+		end
+		return "break"
+	end
+	return LeastVictims
+end
+
 local function WaitForHit(Data : MixData)
 	local Victims = {}
 
 	local Connection = Data["Connection"]
-
-	local Attacker = Data["Attacker"]
-	local HitLimit = Data["HitLimit"]
-	local Hitbox = Data["Hitbox"]
-	local Callback = Data["Callback"]
-	local ShareData = Data["ShareData"]
-
+	
 	local TotalHit = 0
 	local TouchingParts = nil
+	
+	local Result = ActionBox(TotalHit, Victims, Data)
+	if typeof(Result) == "number" then
+		TotalHit += 1
+	end
 
 	repeat task.wait()
-		TouchingParts = Hitbox:GetTouchingParts()
-		local LeastVictims = GetVictims(Victims, 
-			{
-				["Attacker"] = Attacker,
-				["HitLimit"] = HitLimit,
-				["Hitbox"] = Hitbox,
-				["Parts"] = TouchingParts,
-				["Callback"] = Callback,
-				["ShareData"] = ShareData,
-			}
-		)
-		TotalHit += LeastVictims
-		if #Victims >= HitLimit then
+		local Result = ActionBox(TotalHit, Victims, Data)
+		if typeof(Result) == "number" then
+			TotalHit += 1
+		else
+			print("Break")
 			break
 		end
 	until Hitbox.Parent == nil
