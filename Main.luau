@@ -91,7 +91,6 @@ local function GetVictims(Victims, Data : VictimData)
 			end
 		end
 	end
-
 	return #Victims
 end
 
@@ -104,6 +103,7 @@ local function ActionBox(TotalHit, Victims : {}, Data : MixData)
 	local E_Callback = Data["E_Callback"]
 	local ShareData = Data["ShareData"]
 	local IgnoreGround = Data["IgnoreGround"]
+	
 	local TouchingParts = Hitbox:GetTouchingParts()
 	local LeastVictims = GetVictims(Victims, 
 		{
@@ -118,16 +118,20 @@ local function ActionBox(TotalHit, Victims : {}, Data : MixData)
 			["IgnoreGround"] = IgnoreGround,
 		}
 	)
+	
 	TotalHit += LeastVictims
+	
 	if TotalHit > 0 then
 		Hitbox:SetAttribute("Hit", true)
 	end
+	
 	if #Victims >= HitLimit then
 		if Projectile then
 			Hitbox:Destroy()
 		end
 		return "break"
 	end
+	
 	return LeastVictims
 end
 
