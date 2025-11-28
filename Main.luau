@@ -91,10 +91,10 @@ local function GetVictims(Victims, Data : VictimData)
 			end
 		end
 	end
-	return #Victims
+	return LocalCount
 end
 
-local function ActionBox(TotalHit, Victims : {}, Data : MixData)
+local function ActionBox(Victims : {}, Data : MixData)
 	local Attacker = Data["Attacker"]
 	local Projectile = Data["Projectile"]
 	local HitLimit = Data["HitLimit"]
@@ -119,14 +119,9 @@ local function ActionBox(TotalHit, Victims : {}, Data : MixData)
 		}
 	)
 	
-	TotalHit += LeastVictims
-	
-	if TotalHit > 0 then
-		Hitbox:SetAttribute("Hit", true)
-	end
-	
 	if #Victims >= HitLimit then
 		if Projectile then
+			print("Removed")
 			Hitbox:Destroy()
 		end
 		return "break"
@@ -137,27 +132,27 @@ end
 
 local function WaitForHit(Data : MixData)
 	local Victims = {}
-
+	
+	local Hitbox = Data["Hitbox"]
 	local Connection = Data["Connection"]
 	
 	local TotalHit = 0
 	local TouchingParts = nil
 	
-	local Result = ActionBox(TotalHit, Victims, Data)
+	local Result = ActionBox(Victims, Data)
 	if typeof(Result) == "number" then
-		TotalHit += 1
+		TotalHit += Result
 	end
 
 	repeat task.wait()
-		local Result = ActionBox(TotalHit, Victims, Data)
+		local Result = ActionBox(Victims, Data)
 		if typeof(Result) == "number" then
-			TotalHit += 1
-		else
-			print("Break")
+			TotalHit += Result
+		elseif Result == "break" then
 			break
 		end
 	until Hitbox.Parent == nil
-
+	
 	table.clear(Victims)
 	Victims = nil
 
