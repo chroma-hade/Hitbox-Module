@@ -65,9 +65,7 @@ end
 
 local function IsCharacter(BasePart : BasePart)
 	local Humanoid : Humanoid = BasePart.Parent:FindFirstChild("Humanoid")
-	if Humanoid then
-		return Humanoid.Parent
-	end
+	return Humanoid.Parent
 end
 
 local function GetVictims(Victims, Data : VictimData)
@@ -82,15 +80,18 @@ local function GetVictims(Victims, Data : VictimData)
 
 	for Index, Part : BasePart in Parts do
 		local Character = IsCharacter(Part)
-		if Character and Attacker ~= Character and not table.find(Victims, Character) then
-			if HitLimit > LocalCount then
-				LocalCount += 1
-				Hitbox.Color = Color3.new(0, 1, 0)
-                task.defer(Callback, Character, Attacker, Hitbox.CFrame, ShareData)
-				table.insert(Victims, Character)
-			end
+		if not Character or Attacker == Character or table.find(Victims, Character) then
+			continue
 		end
+		if HitLimit <= LocalCount then
+			continue
+		end
+		LocalCount += 1
+		Hitbox.Color = Color3.new(0, 1, 0)
+		task.defer(Callback, Character, Attacker, Hitbox.CFrame, ShareData)
+		table.insert(Victims, Character)
 	end
+	
 	return LocalCount
 end
 
@@ -103,22 +104,20 @@ local function ActionBox(Victims : {}, Data : MixData)
 	local E_Callback = Data["E_Callback"]
 	local ShareData = Data["ShareData"]
 	local IgnoreGround = Data["IgnoreGround"]
-	
+
 	local TouchingParts = Hitbox:GetTouchingParts()
-	local LeastVictims = GetVictims(Victims, 
-		{
-			["Attacker"] = Attacker,
-			["Projectile"] = Projectile,
-			["HitLimit"] = HitLimit,
-			["Hitbox"] = Hitbox,
-			["Parts"] = TouchingParts,
-			["Callback"] = Callback,
-			["E_Callback"] = E_Callback,
-			["ShareData"] = ShareData,
-			["IgnoreGround"] = IgnoreGround,
-		}
-	)
-	
+	local LeastVictims = GetVictims(Victims, {
+		["Attacker"] = Attacker,
+		["Projectile"] = Projectile,
+		["HitLimit"] = HitLimit,
+		["Hitbox"] = Hitbox,
+		["Parts"] = TouchingParts,
+		["Callback"] = Callback,
+		["E_Callback"] = E_Callback,
+		["ShareData"] = ShareData,
+		["IgnoreGround"] = IgnoreGround,
+	})
+
 	if #Victims >= HitLimit then
 		if Projectile then
 			print("Removed")
@@ -126,19 +125,19 @@ local function ActionBox(Victims : {}, Data : MixData)
 		end
 		return "break"
 	end
-	
+
 	return LeastVictims
 end
 
 local function WaitForHit(Data : MixData)
 	local Victims = {}
-	
+
 	local Hitbox = Data["Hitbox"]
 	local Connection = Data["Connection"]
-	
+
 	local TotalHit = 0
 	local TouchingParts = nil
-	
+
 	local Result = ActionBox(Victims, Data)
 	if typeof(Result) == "number" then
 		TotalHit += Result
@@ -152,7 +151,7 @@ local function WaitForHit(Data : MixData)
 			break
 		end
 	until Hitbox.Parent == nil
-	
+
 	table.clear(Victims)
 	Victims = nil
 
